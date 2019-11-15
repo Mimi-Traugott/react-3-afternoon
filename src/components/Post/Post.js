@@ -53,6 +53,7 @@ export default class Post extends Component {
     // This is destructuring! You can also think of it as being written as so:
       // const editing = this.state.editing
       // const showMasterMenu = this.state.showMasterMenu
+    const { text, date } = this.props // destructure text and date off of poerps and put in the top of the render method (2)
     const { editing, showMasterMenu } = this.state;
 
     return (
@@ -66,7 +67,7 @@ export default class Post extends Component {
           {/* Drop-down menu. Remember that the "showMasterMenu" variable has been destructured off of this.state */}
           <div className="Post__master-menu" style={ { display: showMasterMenu ? 'flex' : 'none' } }>
             <span onClick={ this.showEdit }>Edit</span>
-            <span>Delete</span>
+            <span onClick={ () => this.props.deletePostFn(id) }>Delete</span>
           </div>
         </div>
 
@@ -79,7 +80,7 @@ export default class Post extends Component {
           <span className="Post__name">DevMountain</span>
           <span className="Post__handle">@DevMountain</span>
 
-          <span className="Post__date">- POST DATE GOES HERE</span>
+          <span className="Post__date">{ date }</span> {/* rendered date in the post component to equal the value of date on the props (app.js component these have been destructured*/}
         </div>
 
         {/* This is where the text goes. Notice the turnary statement. The turnary statement decides to display either the text OR the editor view
@@ -95,10 +96,12 @@ export default class Post extends Component {
             // This has been pulled off of this.state via destructuring
             editing
             ?
-              <Edit text=""
-                    hideEdit={ this.hideEdit } />
+              <Edit text={ text }  //class of post_content either renders a posts text or an edit component. the Edit is responsible for capturing a users new text to assign it to a post.
+                    id={ this.props.id }
+                    hideEdit={ this.hideEdit }
+                    updatePostFn={ this.props.updatePostFn } />  //we pass the updatePostFn prop from post.js
             :
-              <span className="Post__text">POST TEXT GOES HERE</span>
+              <span className="Post__text">{ text }</span> //rendered text in the post component to equal the value of text on props(app.js component) these have been destructured
           }
         </div>
 
